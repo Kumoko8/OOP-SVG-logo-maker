@@ -1,1 +1,0 @@
-# OOP-SVG-logo-maker-Homework-10
