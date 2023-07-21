@@ -1,4 +1,5 @@
 import inquirer from "inquirer";
+function prompts () {
 
 inquirer
     .prompt([
@@ -28,7 +29,8 @@ inquirer
         
     ])
     .then((answers) => {const svg = new Svg(answers.brandInitials, answers.textColor, answers.shape, answers.shapeColor)})
-
+}
+//defines the results of the prompts
     class Svg {
         constructor(brandInitials, textColor, shape, shapeColor) {
             this.brandInitials = brandInitials;
@@ -37,5 +39,17 @@ inquirer
             this.shapeColor = shapeColor;
         }
      }
+     //defining the Svg object
+
         Svg.prototype.render = function () {
+            console.log("SVG rendered successfully")
         }
+    //using a function to render the svg file based on the results of the prompt (answers)
+
+    //initial function
+
+    function init () {
+       prompts();
+        
+    }
+    init();
