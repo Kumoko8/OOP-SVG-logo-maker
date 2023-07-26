@@ -1,6 +1,11 @@
-import inquirer from "inquirer";
-function prompts () {
+const {default: inquirer} = import("inquirer");
+import fs from "fs";
 
+import svgContent from "./lib/functions/shapes.js";
+// import generateLogo from "./lib/functions/generateLogo.js";
+
+function prompts () {
+//the prompt will get the information for the logo
 inquirer
     .prompt([
         {
@@ -28,7 +33,13 @@ inquirer
         }
         
     ])
-    .then((answers) => {const svg = new Svg(answers.brandInitials, answers.textColor, answers.shape, answers.shapeColor)})
+    //these answers become stored in an object 
+    .then((answers) => {
+        const svg = new Svg(
+            answers.brandInitials, 
+            answers.textColor, 
+            answers.shape, 
+            answers.shapeColor)})
 }
 //defines the results of the prompts
     class Svg {
@@ -42,8 +53,20 @@ inquirer
      //defining the Svg object
 
         Svg.prototype.render = function () {
-            console.log("SVG rendered successfully")
-        }
+        
+                fs.writeFile("./Assets/logo.svg", svgContent, (err) => {
+                    if (err) {
+                        console.error("Error writing file:", err);
+                    } else {
+                        console.log("SVG rendered successfully");
+                    }
+                   
+                 })
+               
+              }
+
+            
+        
     //using a function to render the svg file based on the results of the prompt (answers)
 
     //initial function
@@ -53,3 +76,5 @@ inquirer
         
     }
     init();
+
+    export default svg;
