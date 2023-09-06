@@ -1,80 +1,83 @@
-const {default: inquirer} = import("inquirer");
+import inquirer from "inquirer";
+// const inquirer = require("inquirer");
+// const fs = require("fs");
 import fs from "fs";
+import { Circle, Triangle, Square } from "./lib/functions/shapes.js";
 
-import svgContent from "./lib/functions/shapes.js";
-// import generateLogo from "./lib/functions/generateLogo.js";
+const questions = [
 
-function prompts () {
-//the prompt will get the information for the logo
-inquirer
-    .prompt([
+    {
+        type: "list",
+        name: "shape",
+        message: "What shape would you like your logo to be?",
+        choices: ["Circle", "Triangle", "Square"]
+    },
+
         {
             type:"input",
-            name: "brandInitials",
-            message: "What initials would you like in your logo?",
-            maxLength: 3
+            name: "text",
+            message: "What initials would you like in your logo (up to 3)?",
+            // maxLength: 3
         },
         {
             type: "input",
             name: "textColor",
-            message: "What color would you like the initials to be?"
+            message: "What color would you like the initials to be (keyword or hexadecimal)?"
         },
     
-        {
-            type: "list",
-            name: "shape",
-            message: "What shape would you like your logo to be?",
-            choices: ["Square", "Circle", "Triangle"]
-        },
+        
         {
             type:"input",
             name: "shapeColor",
             message: "What color would you like your shape to be?"
         }
         
-    ])
-    //these answers become stored in an object 
-    .then((answers) => {
-        const svg = new Svg(
-            answers.brandInitials, 
-            answers.textColor, 
-            answers.shape, 
-            answers.shapeColor)})
-}
-//defines the results of the prompts
-    class Svg {
-        constructor(brandInitials, textColor, shape, shapeColor) {
-            this.brandInitials = brandInitials;
-            this.textColor = textColor;
-            this.shape = shape;
-            this.shapeColor = shapeColor;
-        }
-     }
-     //defining the Svg object
+    ]
 
-        Svg.prototype.render = function () {
-        
-                fs.writeFile("./Assets/logo.svg", svgContent, (err) => {
-                    if (err) {
-                        console.error("Error writing file:", err);
-                    } else {
-                        console.log("SVG rendered successfully");
-                    }
-                   
-                 })
-               
-              }
+    let shape;
+
+    async function generateShape() {
+        try {
+          const answers = await inquirer.prompt(questions);
+      
+          switch (answers.shape) {
+            case 'Circle':
+              shape = new Circle (80, answers.text, answers.textColor, answers.shapeColor);
+              break;
+            case 'Triangle':
+              shape = new Triangle (150, answers.text, answers.textColor, answers.shapeColor);
+              break;
+            case 'Square':
+              shape = new Square (50, answers.text, answers.textColor, answers.shapeColor);
+              break;
+            default:
+              console.error('Invalid shape type');
+              return;
+          }
+        } catch (error) {
+          console.error('An error occurred:', error);
+        }
+
+        const svgCode = shape.getSVG();
+          const filePath = './Assets/logo.svg';
+
+          fs.writeFile(filePath, svgCode, (err) => {
+            if (err) {
+              console.error(err);
+              return;
+            }
+            console.log(`SVG file saved as ${filePath}`);
+          });
+
+      }
+      
+      // Start the prompt
+      generateShape();
+    
+
+
+    
+
 
             
         
-    //using a function to render the svg file based on the results of the prompt (answers)
-
-    //initial function
-
-    function init () {
-       prompts();
-        
-    }
-    init();
-
-    export default svg;
