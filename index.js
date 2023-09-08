@@ -1,8 +1,10 @@
 import inquirer from "inquirer";
-// const inquirer = require("inquirer");
-// const fs = require("fs");
 import fs from "fs";
 import { Circle, Triangle, Square } from "./lib/functions/shapes.js";
+
+// const inquirer = require('inquirer');
+// const fs = require('fs');
+// const { Circle, Triangle, Square } = require('./lib/functions/shapes.js');
 
 const questions = [
 
@@ -17,7 +19,7 @@ const questions = [
             type:"input",
             name: "text",
             message: "What initials would you like in your logo (up to 3)?",
-            // maxLength: 3
+            maxLength: 3
         },
         {
             type: "input",
@@ -58,7 +60,7 @@ const questions = [
           console.error('An error occurred:', error);
         }
 
-        const svgCode = shape.getSVG();
+        const svgCode = shape.render();
           const filePath = './Assets/logo.svg';
 
           fs.writeFile(filePath, svgCode, (err) => {
