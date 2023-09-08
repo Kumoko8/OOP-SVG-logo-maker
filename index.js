@@ -68,7 +68,7 @@ const questions = [
               console.error(err);
               return;
             }
-            console.log(`SVG file saved as ${filePath}`);
+            console.log(`Generated ${filePath}`);
           });
 
       }
